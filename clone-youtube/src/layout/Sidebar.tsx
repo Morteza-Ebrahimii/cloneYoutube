@@ -9,56 +9,158 @@ import {
   PlaySquare,
   Clock,
   ListVideo,
+  Flame,
+  ShoppingBag,
+  Music2,
+  Film,
+  Radio,
+  Gamepad2,
+  Newspaper,
+  Trophy,
+  Lightbulb,
+  Shirt,
+  Podcast,
 } from "lucide-react";
 import { Children, ElementType, useState } from "react";
 import { Button, buttonStyles } from "../component/Button";
 import { twMerge } from "tailwind-merge";
-import { playlists } from "../data/Sidebar";
+import { playlists, subscriptions } from "../data/Sidebar";
+import { useSidebarContext } from "../context/SidebarContext";
+import { PageHeaderFirstSectoin } from "./PageHeader";
 
 export function Sidebar() {
+  const { isLargeOpen, isSmallOpen, close } = useSidebarContext();
+
   return (
     <>
-      <aside className="sticky top-0 overflow-y-auto scrollbar-hidden pb-4 flex flex-col ml-1 lg:hidden">
-        <SmallSidebarItem Icon={Home} title="Home" url="/" />
-        <SmallSidebarItem Icon={Repeat} title="Shorts" url="/shorts" />
+      <aside
+        className={`sticky top-0 overflow-y-auto scrollbar-hidden pb-4 flex flex-col ml-1  ${
+          isLargeOpen ? "lg:hidden" : "lg:flex"
+        }`}
+      >
+        <SmallSidebarItem IconOrImgUrl={Home} title="Home" url="/" />
+        <SmallSidebarItem IconOrImgUrl={Repeat} title="Shorts" url="/shorts" />
         <SmallSidebarItem
-          Icon={Clapperboard}
+          IconOrImgUrl={Clapperboard}
           title="Subscriptions"
           url="/Subscriptions"
         />
-        <SmallSidebarItem Icon={Library} title="Library" url="/library" />
+        <SmallSidebarItem
+          IconOrImgUrl={Library}
+          title="Library"
+          url="/library"
+        />
       </aside>
-      <aside className="w-56 lg:sticky absolute top-0 overflow-y-auto scrollbar-hidden pb-4 flex-col gap-2 px-2 flex">
+      {isSmallOpen && (
+        <div
+          onClick={close}
+          className="lg:hidden fixed inset-0 z-[999] bg-secondary-dark opacity-50 "
+        />
+      )}
+
+      <aside
+        className={`w-56 lg:sticky absolute top-0 overflow-y-auto scrollbar-hidden pb-4 flex-col gap-2 px-2 ${
+          isLargeOpen ? "lg:flex" : "lg-hidden"
+        } ${isSmallOpen ? "flex z-[999] bg-white max-h-screen" : "hidden"} `}
+      >
+        <div className="lg:hidden pt-2 pb-4 px-2 sticky top-0 bg-white">
+          <PageHeaderFirstSectoin />
+        </div>
         <LargeSidebarSection>
-          <LargeSidebarItem isActive Icon={Home} title="Home" url="/" />
+          <LargeSidebarItem isActive IconOrImgUrl={Home} title="Home" url="/" />
           <LargeSidebarItem
-            Icon={Clapperboard}
+            IconOrImgUrl={Clapperboard}
             title="Subscriptions"
             url="/Subscriptions"
           />
         </LargeSidebarSection>
         <hr />
         <LargeSidebarSection visibleItemCount={5}>
-          <LargeSidebarItem Icon={Library} title="Library" url="/library" />
-          <LargeSidebarItem Icon={History} title="History" url="/history" />
           <LargeSidebarItem
-            Icon={PlaySquare}
+            IconOrImgUrl={Library}
+            title="Library"
+            url="/library"
+          />
+          <LargeSidebarItem
+            IconOrImgUrl={History}
+            title="History"
+            url="/history"
+          />
+          <LargeSidebarItem
+            IconOrImgUrl={PlaySquare}
             title="Your Videos"
             url="/Your-Videos"
           />
           <LargeSidebarItem
-            Icon={Clock}
+            IconOrImgUrl={Clock}
             title="Watch Later"
             url="/playlist?list=WL"
           />
           {playlists.map((playList) => (
             <LargeSidebarItem
               key={playList.id}
-              Icon={ListVideo}
+              IconOrImgUrl={ListVideo}
               title={playList.name}
               url={`/playlist?list=${playList.id}`}
             />
           ))}
+        </LargeSidebarSection>
+        <hr />
+        <LargeSidebarSection title="Subscriptoin">
+          {subscriptions.map((subscription) => (
+            <LargeSidebarItem
+              key={subscription.id}
+              IconOrImgUrl={subscription.imgUrl}
+              title={subscription.channelName}
+              url={`/@${subscription.id}`}
+            />
+          ))}
+        </LargeSidebarSection>
+        <hr />
+        <LargeSidebarSection title="Explore">
+          <LargeSidebarItem
+            IconOrImgUrl={Flame}
+            title="Tranding"
+            url="/tranding"
+          />
+          <LargeSidebarItem
+            IconOrImgUrl={ShoppingBag}
+            title="Shopping"
+            url="/shopping"
+          />
+          <LargeSidebarItem IconOrImgUrl={Music2} title="Music" url="/music" />
+          <LargeSidebarItem
+            IconOrImgUrl={Film}
+            title="Movies & TV"
+            url="/movies-tv"
+          />
+          <LargeSidebarItem IconOrImgUrl={Radio} title="Live" url="/live" />
+          <LargeSidebarItem
+            IconOrImgUrl={Gamepad2}
+            title="Gaming"
+            url="/gaming"
+          />
+          <LargeSidebarItem IconOrImgUrl={Newspaper} title="News" url="/news" />
+          <LargeSidebarItem
+            IconOrImgUrl={Trophy}
+            title="Sports"
+            url="/sports"
+          />
+          <LargeSidebarItem
+            IconOrImgUrl={Lightbulb}
+            title="Learning"
+            url="/learning"
+          />
+          <LargeSidebarItem
+            IconOrImgUrl={Shirt}
+            title="Fation & beauty"
+            url="/fation-beauty"
+          />
+          <LargeSidebarItem
+            IconOrImgUrl={Podcast}
+            title="Padcasts"
+            url="/padcasts"
+          />
         </LargeSidebarSection>
       </aside>
     </>
@@ -66,11 +168,11 @@ export function Sidebar() {
 }
 
 type SmallSidebarItemProps = {
-  Icon: ElementType;
+  IconOrImgUrl: ElementType;
   title: string;
   url: string;
 };
-function SmallSidebarItem({ Icon, title, url }: SmallSidebarItemProps) {
+function SmallSidebarItem({ IconOrImgUrl, title, url }: SmallSidebarItemProps) {
   return (
     <a
       href={url}
@@ -79,7 +181,7 @@ function SmallSidebarItem({ Icon, title, url }: SmallSidebarItemProps) {
         "py-4 px-1 flex flex-col items-center rounded-lg gap-1 "
       )}
     >
-      <Icon className="w-6 h-6" />
+      <IconOrImgUrl className="w-6 h-6" />
       <div className="text-sm">{title}</div>
     </a>
   );
@@ -101,7 +203,7 @@ function LargeSidebarSection({
   const visibleChildren = isExpanded
     ? childrenArray
     : childrenArray.slice(0, visibleItemCount);
-  const ButtonIcon = isExpanded ? ChevronUp : ChevronDown;
+  const ButtonIconOrImgUrl = isExpanded ? ChevronUp : ChevronDown;
 
   return (
     <div>
@@ -113,7 +215,7 @@ function LargeSidebarSection({
           variant="ghost"
           className="w-full flex items-center rounded-lg gap-4 p-3"
         >
-          <ButtonIcon className="w-6 h-6 " />
+          <ButtonIconOrImgUrl className="w-6 h-6 " />
           <div>{isExpanded ? "Show Less" : "Show More"}</div>
         </Button>
       )}
@@ -122,13 +224,13 @@ function LargeSidebarSection({
 }
 
 type LargeSidebarItemProps = {
-  Icon: ElementType;
+  IconOrImgUrl: ElementType | string;
   title: string;
   url: string;
   isActive?: boolean;
 };
 function LargeSidebarItem({
-  Icon,
+  IconOrImgUrl,
   title,
   url,
   isActive = false,
@@ -142,7 +244,11 @@ function LargeSidebarItem({
         ${isActive ? "font-bold bg-neutral-100 hover:bg-secondary" : undefined}`
       )}
     >
-      <Icon className="w-6 h-6" />
+      {typeof IconOrImgUrl === "string" ? (
+        <img src={IconOrImgUrl} className="h-6 w-6 rounded-full " />
+      ) : (
+        <IconOrImgUrl className="h-6 w-6" />
+      )}
       <div className="whitespace-nowrap overflow-hidden text-ellipsis">
         {title}
       </div>
