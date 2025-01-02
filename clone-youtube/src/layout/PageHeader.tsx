@@ -9,7 +9,7 @@ export function PageHeader() {
 
   return (
     <div className="flex gap-10 lg:gap-20 justify-between pt-2 mb-6 mx-4">
-      <PageHeaderFirstSectoin hidden={showFullWidthSearch} />
+      <PageHeaderFirstSection hidden={showFullWidthSearch} />
       <form
         className={`gap-4 flex-grow justify-center ${
           showFullWidthSearch ? "flex" : "hidden md:flex"
@@ -70,11 +70,11 @@ export function PageHeader() {
   );
 }
 
-type PageHeaderFirstSectoinPropa = {
+type PageHeaderFirstSectionPropa = {
   hidden?: boolean;
 };
 
-export function PageHeaderFirstSectoin({ hidden = false }: PageHeaderFirstSectoinPropa) {
+export function PageHeaderFirstSection({ hidden = false }: PageHeaderFirstSectionPropa) {
   const { toggle } = useSidebarContext();
 
   return (

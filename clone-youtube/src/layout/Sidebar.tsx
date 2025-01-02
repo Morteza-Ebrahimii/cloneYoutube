@@ -26,7 +26,7 @@ import { Button, buttonStyles } from "../component/Button";
 import { twMerge } from "tailwind-merge";
 import { playlists, subscriptions } from "../data/Sidebar";
 import { useSidebarContext } from "../context/SidebarContext";
-import { PageHeaderFirstSectoin } from "./PageHeader";
+import { PageHeaderFirstSection } from "./PageHeader";
 
 export function Sidebar() {
   const { isLargeOpen, isSmallOpen, close } = useSidebarContext();
@@ -64,7 +64,7 @@ export function Sidebar() {
         } ${isSmallOpen ? "flex z-[999] bg-white max-h-screen" : "hidden"} `}
       >
         <div className="lg:hidden pt-2 pb-4 px-2 sticky top-0 bg-white">
-          <PageHeaderFirstSectoin />
+          <PageHeaderFirstSection />
         </div>
         <LargeSidebarSection>
           <LargeSidebarItem isActive IconOrImgUrl={Home} title="Home" url="/" />
